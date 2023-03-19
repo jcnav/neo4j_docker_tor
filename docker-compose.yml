@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+  # docker run --publish=7474:7474 --publish=7687:7687 --volume=$HOME/neo4j/data:/data arm64v8/neo4j
+  # You must install manually the plugins
+  # https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.4.0.9/apoc-4.4.0.9-all.jar
+  #
+  neo4j:
+    image: neo4j:4.4.0
+    hostname: neo4j
+    container_name: neo4j_db
+#    restart: unless-stopped
+    ports:
+      - 7474:7474
+      - 7687:7687
+    volumes:
+      - ./neo4j_db/conf:/conf
+      - ./neo4j_db/data:/data
+      - ./neo4j_db/import:/import
+      - ./neo4j_db/logs:/logs
+      - ./neo4j_db/plugins:/plugins
+    environment:
+      - NEO4J_AUTH=neo4j/crawler8
+#      # Raise memory limits
+#      - NEO4J_server_memory_pagecache_size=1G
+#      - NEO4J_server_memory_heap_initial__size=1G
+#      - NEO4J_server_memory_heap_max__size=1G
+      # Raise memory limits
+      - NEO4J_dbms_memory_pagecache_size=1G
+      - NEO4J_dbms_memory_heap_initial__size=1G
+      - NEO4J_dbms_memory_heap_max__size=1G
+      # Import/export DB options
+      - NEO4J_dbms.directories.import=import
+      - NEO4J_dbms.security.allow_csv_import_from_file_urls=true
+
+      # APOC install
+      # - NEO4J_PLUGINS='["apoc"]'
+      - NEO4JLABS_PLUGINS='["apoc"]'
+      - NEO4J_dbms.security.procedures.allowlist=apoc.coll.*,apoc.load.*,gds.*
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.\\\*,gds.\\\*
+      # APOC enable import/export data
+      - NEO4J_apoc.export.file.enabled=true
+      - NEO4J_apoc.import.file.enabled=true
+    networks:
+      - neo4j_network
+
+  neodash:
+    image: nielsdejong/neodash:latest
+    hostname: neodash
+    container_name: neodash_dashboard
+    ports:
+      - 5005:5005
+#    volumes:
+#      - ./conf:/conf
+    networks:
+      - neo4j_network
+    depends_on:
+      - neo4j
+
+networks:
+  neo4j_network:
+    name: neo4j_network
+    driver: bridge

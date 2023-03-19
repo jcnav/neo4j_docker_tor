@@ -1,0 +1,6 @@
+# neo4j
+pandas
+neo4j
+fsspec
+# Interesting for elements recognition
+# restalker
