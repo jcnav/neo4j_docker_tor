@@ -68,6 +68,34 @@ services:
     depends_on:
       - neo4j
 
+  neo4j_provision_i2p:
+    container_name: neo4j_provision_i2p
+    build:
+      dockerfile: ./neo4j_operations/dockerfile.provision_darknet
+    env_file:
+      - db.env
+      - i2p.env
+#    environment:
+#      - CSV_NODES=./csv/i2p_results.csv
+    networks:
+      - neo4j_network
+    depends_on:
+      - neo4j
+
+  neo4j_provision_tor:
+    container_name: neo4j_provision_tor
+    build:
+      dockerfile: ./neo4j_operations/dockerfile.provision_darknet
+    env_file:
+      - db.env
+      - tor.env
+#    environment:
+#      - CSV_NODES=./csv/tor_results.csv
+    networks:
+      - neo4j_network
+    depends_on:
+      - neo4j
+
 networks:
   neo4j_network:
     name: neo4j_network
