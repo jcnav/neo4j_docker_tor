@@ -56,7 +56,7 @@ services:
       - neo4j_network
     depends_on:
       - neo4j
-      -
+
   delete_db:
     container_name: delete_db
     build:
