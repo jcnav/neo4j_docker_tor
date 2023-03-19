@@ -56,6 +56,17 @@ services:
       - neo4j_network
     depends_on:
       - neo4j
+      -
+  delete_db:
+    container_name: delete_db
+    build:
+      dockerfile: ./neo4j_operations/dockerfile.clean_db
+    env_file:
+      - db.env
+    networks:
+      - neo4j_network
+    depends_on:
+      - neo4j
 
 networks:
   neo4j_network:
