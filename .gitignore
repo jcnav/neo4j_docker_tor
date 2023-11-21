@@ -132,4 +132,4 @@ dmypy.json
 .idea/
 
 # Neo4J contents
-neo4j_db/
+neo4j_db/data

@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  # docker run --publish=7474:7474 --publish=7687:7687 --volume=$HOME/neo4j/data:/data arm64v8/neo4j
+  # You must install manually the plugins
+  # https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/4.4.0.9/apoc-4.4.0.9-all.jar
+  # For gds plugin compatibility table
+  # https://neo4j.com/docs/graph-data-science/current/installation/supported-neo4j-versions/
+
+  delete_db:
+    container_name: delete_db
+    build:
+      dockerfile: ./neo4j_operations/dockerfile.clean_db
+    restart: "no"
+    env_file:
+      - db.env
+    networks:
+      - neo4j_network
+    depends_on:
+      - neo4j
+
+
+#  neo4j_provision_i2p:
+#    container_name: neo4j_provision_i2p
+#    build:
+#      dockerfile: ./neo4j_operations/dockerfile.provision_darknet
+#    env_file:
+#      - db.env
+#      - i2p.env
+##    environment:
+##      - CSV_NODES=./csv/i2p_results.csv
+#    networks:
+#      - neo4j_network
+#    depends_on:
+#      - neo4j
+
+  neo4j_provision_tor:
+    container_name: neo4j_provision_tor
+    build:
+      dockerfile: ./neo4j_operations/dockerfile.provision_darknet
+    restart: "no"
+    env_file:
+      - db.env
+      - tor.env
+    # environment:
+    #   - CSV_NODES=./csv/tor_results.csv
+
