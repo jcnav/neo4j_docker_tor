@@ -2,5 +2,10 @@
 pandas
 neo4j
 fsspec
+loguru
+
+# Studying BTC APIs
+blockcypher
+
 # Interesting for elements recognition
 # restalker

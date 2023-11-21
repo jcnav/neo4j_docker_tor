@@ -1,0 +1,13 @@
+# FROM python:3.11-alpine
+FROM python:3.11
+
+LABEL Maintainer="jcanotid"
+
+WORKDIR /usr/app/src
+
+COPY * ./
+
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD [ "python", ".//nodes_market_btc.py"]
